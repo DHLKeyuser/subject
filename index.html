@@ -31,6 +31,14 @@
 </style>
 </head>
 <body>
+<h1>Install the subject filler</h1>
+<p>Click the button below to download all required files.</p>
+<button onclick="downloadAll()">Download All</button>
+<h2>Tutorial: How to Install on Microsoft Edge</h2>
+<video controls>
+<source src="tutorial.mp4" type="video/mp4">
+   Your browser does not support the video tag.
+</video>
 <script>
    function downloadAll() {
      const files = [
@@ -41,10 +49,9 @@
        'macro4.txt',
        'macro5.txt',
        'macro6.txt',
-       'scraper.js',
-       'background.js',
        'manifest.json',
-       'manifest.json'
+       'scraper.js',
+       'background.js'
      ];
      files.forEach(file => {
        const a = document.createElement('a');
