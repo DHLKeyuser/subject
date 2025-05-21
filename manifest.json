@@ -1,0 +1,18 @@
+{
+ "manifest_version": 3,
+ "name": "Shipment Scraper",
+ "version": "1.0",
+ "description": "Scrapes shipment info and writes to file",
+ "permissions": ["downloads"],
+ "host_permissions": ["https://solutions.inet-logistics.com/*"],
+ "background": {
+   "service_worker": "background.js"
+ },
+ "content_scripts": [
+   {
+     "matches": ["https://solutions.inet-logistics.com/ls/vsa/servlet/*"],
+     "js": ["scraper.js"],
+     "run_at": "document_idle"
+   }
+ ]
+}
