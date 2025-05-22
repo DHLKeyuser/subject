@@ -367,9 +367,6 @@ If Dir(tempPath) <> "" Then
     Next
 
 
-
-    Kill tempPath
-
 End If
 
 ' 14) Assemble subject line using structured info
@@ -377,6 +374,59 @@ End If
 Dim newSubj As String
 
 newSubj = priority & " - " & documentNumber & " - " & UCase(country) & " - Shipping 5L (" & shipmentID & ")"
+
+' Check for DN block and count how many DNs are listed
+
+Dim isInDNBlock As Boolean
+
+Dim dnMatches As Long
+
+isInDNBlock = False
+
+dnMatches = 0
+
+If shipmentInfo <> "" Then
+
+    lines = Split(shipmentInfo, vbLf)
+
+    For i = 0 To UBound(lines)
+
+        Dim ln As String
+
+        ln = Trim(lines(i))
+
+        If ln = "DN:" Then
+
+            isInDNBlock = True
+
+        ElseIf isInDNBlock Then
+
+            If ln = "" Then
+
+                Exit For ' stop when we hit a blank line
+
+            ElseIf (Len(ln) = 8 And IsNumeric(ln)) Then
+
+                dnMatches = dnMatches + 1
+
+            Else
+
+                Exit For ' stop if it's not a DN
+
+            End If
+
+        End If
+
+    Next
+
+End If
+
+If dnMatches > 1 Then
+
+    newSubj = newSubj & " - Consolidation"
+
+End If
+ 
 
 mail.Subject = newSubj
  
