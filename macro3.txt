@@ -367,9 +367,6 @@ If Dir(tempPath) <> "" Then
     Next
 
 
-
-    Kill tempPath
-
 End If
 
 ' 14) Assemble subject line using structured info
