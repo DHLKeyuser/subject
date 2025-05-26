@@ -55,7 +55,7 @@ Public Sub TROMP()
 
         If LCase(Right(att.FileName, 4)) = ".pdf" Then
 
-            If att.FileName Like "55######.pdf" Or att.FileName Like "89######.pdf" Then
+            If att.FileName Like "54######.pdf" Or att.FileName Like "55######.pdf" Or att.FileName Like "89######.pdf" Then
 
                 att.SaveAsFile tempPdf
 
@@ -147,7 +147,7 @@ Public Sub TROMP()
 
     chunk = Mid$(textContent, i, 8)
 
-    If (Left$(chunk, 2) = "55" Or Left$(chunk, 2) = "89") _
+    If (Left$(chunk, 2) = "54" Or Left$(chunk, 2) = "55" Or Left$(chunk, 2) = "89") _
        And IsNumeric(chunk) And InStr(chunk, ".") = 0 Then
 
         ' grab the character just before and just after the 8-digit chunk

@@ -55,7 +55,7 @@ Public Sub DSV()
 
         If LCase(Right(att.FileName, 4)) = ".pdf" Then
 
-            If att.FileName Like "55######.pdf" Or att.FileName Like "89######.pdf" Then
+            If att.FileName Like "54######.pdf" Or att.FileName Like "55######.pdf" Or att.FileName Like "89######.pdf" Then
 
                 att.SaveAsFile tempPdf
 
@@ -147,7 +147,7 @@ Public Sub DSV()
 
     chunk = Mid$(textContent, i, 8)
 
-    If (Left$(chunk, 2) = "55" Or Left$(chunk, 2) = "89") _
+    If (Left$(chunk, 2) = "54" Or Left$(chunk, 2) = "55" Or Left$(chunk, 2) = "89") _
        And IsNumeric(chunk) And InStr(chunk, ".") = 0 Then
 
         ' grab the character just before and just after the 8-digit chunk
@@ -373,7 +373,7 @@ If Dir(tempPath) <> "" Then
 
 End If
 
-' Update subject based on forwarder, time, and priority
+'14 Update subject based on forwarder, time, and priority
 
 If forwarder = "DSV" Then
 
@@ -391,6 +391,14 @@ If forwarder = "DSV" Then
 
         truckLabel = "please advise pick-up"
 
+    ElseIf isWeekend Then
+
+        ' Routine or Priority on weekend: schedule Truck 1 on Monday
+
+        Dim mondayDate As Date: mondayDate = currentTime + (8 - todayWeekday)
+
+        truckLabel = "Truck 1 " & Format(mondayDate, "dd/mm")
+
     ElseIf TimeValue(currentTime) < TimeValue("07:30:00") Then
 
         truckLabel = "Truck 1"
@@ -401,7 +409,7 @@ If forwarder = "DSV" Then
 
     Else
 
-        ' After 16:30 and not emergency
+        ' After 16:30: schedule Truck 1 for next working day
 
         Dim nextDay As Date: nextDay = currentTime + 1
 
@@ -415,10 +423,12 @@ If forwarder = "DSV" Then
 
     End If
 
+
 End If
  
+ 
 
-' 14) Assemble subject line using structured info
+' 15) Assemble subject line using structured info
 
 Dim newSubj As String
 
