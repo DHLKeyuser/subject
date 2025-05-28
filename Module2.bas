@@ -333,13 +333,16 @@ Next
 
 Dim tempPath As String
 
-Dim shipmentID As String, forwarder As String
+Dim shipmentID As String, forwarder As String, trm As String
 
 Dim shipmentInfo As String
+
 
 shipmentID = "ID"           ' default fallback
 
 forwarder = "Forwarder"     ' default fallback
+
+trm = ""                ' default fallback
 
 tempPath = Environ("USERPROFILE") & "\Downloads\shipment_data_temp.txt"
 
@@ -349,29 +352,35 @@ If Dir(tempPath) <> "" Then
 
     shipmentInfo = fso.OpenTextFile(tempPath, 1).ReadAll
 
-    ' Extract Shipment ID and Forwarder from text
+    ' Extract Shipment ID, Forwarder and TRM from text
 
     lines = Split(shipmentInfo, vbLf)
 
     For i = 0 To UBound(lines)
 
-        If Trim(lines(i)) = "Shipment ID:" Then
+        Select Case Trim(lines(i))
 
-            If i + 1 <= UBound(lines) Then shipmentID = Trim(lines(i + 1))
+            Case "Shipment ID:"
 
-        ElseIf Trim(lines(i)) = "Forwarder:" Then
+                If i + 1 <= UBound(lines) Then shipmentID = Trim(lines(i + 1))
 
-            If i + 1 <= UBound(lines) Then forwarder = Trim(lines(i + 1))
+            Case "Forwarder:"
 
-        End If
+                If i + 1 <= UBound(lines) Then forwarder = Trim(lines(i + 1))
 
-    Next
+            Case "TRM:"
+
+                If i + 1 <= UBound(lines) Then trm = Trim(lines(i + 1))
+
+        End Select
+
+    Next i
 
 
+    End If
 
+    Set fso = Nothing
 
-
-End If
 
 '14 Update subject based on forwarder, time, and priority
 
@@ -432,7 +441,7 @@ End If
 
 Dim newSubj As String
 
-newSubj = priority & " - " & documentNumber & " - " & UCase(country) & " - Shipping 5L (" & shipmentID & ")" & " - " & truckLabel
+newSubj = priority & " - " & documentNumber & " - " & UCase(country) & " - Shipping 5L (" & shipmentID & ")" & " - " & truckLabel & " " & trm
 
 ' Check for DN block and count how many DNs are listed
 
