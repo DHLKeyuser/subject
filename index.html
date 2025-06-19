@@ -34,7 +34,9 @@
 <h1>Install the subject filler</h1>
 <p>Click the button below to download all required files.</p>
 <button onclick="downloadAll()">Download All</button>
-<h2>Tutorial: How to Install on Microsoft Edge</h2>
+<p>Click the button below to install required extension.</p>
+<button onclick="downloadExt()">Install Extension</button>
+<h2>-</h2>
 <video controls>
 <source src="tutorial.mp4" type="video/mp4">
    Your browser does not support the video tag.
@@ -62,6 +64,8 @@
        document.body.removeChild(a);
      });
    }
+   function downloadExt() {
+      window.open('https://chromewebstore.google.com/detail/shipment-scraper/ojhnkicdgmmhfbdakaiggajfihobogjb?utm_source=item-share-cb', '_blank")
 </script>
 </body>
 </html>
