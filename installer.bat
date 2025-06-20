@@ -2,7 +2,21 @@
 
 setlocal
 
-:: Define paths
+:: Kill Outlook if running
+
+tasklist /FI "IMAGENAME eq OUTLOOK.EXE" | find /I "OUTLOOK.EXE" >nul
+
+if %errorlevel%==0 (
+
+    echo Closing Outlook...
+
+    taskkill /IM OUTLOOK.EXE /F >nul
+
+    timeout /t 2 >nul
+
+)
+
+:: Paths
 
 set "USERPROFILE=%USERPROFILE%"
 
@@ -14,15 +28,19 @@ set "VBAPROJECT=%DOWNLOADS%\VbaProject.otm"
 
 set "ZIPFILE=%DOWNLOADS%\xpdf-tools-win-4.05.zip"
 
-set "DEST_FOLDER=%USERPROFILE%\Documents\PDFTools"
+set "DOCS_FOLDER=%USERPROFILE%\Documents"
 
-:: Move VbaProject.otm
+set "DEST_FOLDER=%DOCS_FOLDER%\PDFTools"
+
+:: Move .otm
 
 if exist "%VBAPROJECT%" (
 
-    echo Moving VbaProject.otm to Outlook folder...
+    echo Copying VbaProject.otm to Outlook folder...
 
-    move /Y "%VBAPROJECT%" "%OUTLOOK_FOLDER%"
+    copy /Y "%VBAPROJECT%" "%OUTLOOK_FOLDER%\VbaProject.otm" >nul
+
+    echo .otm copied.
 
 ) else (
 
@@ -30,21 +48,31 @@ if exist "%VBAPROJECT%" (
 
 )
 
-:: Create destination folder if not exists
-
-if not exist "%DEST_FOLDER%" (
-
-    mkdir "%DEST_FOLDER%"
-
-)
-
-:: Unzip using 7-Zip
+:: Unzip and rename
 
 if exist "%ZIPFILE%" (
 
-    echo Extracting xpdf-tools to Documents\PDFTools...
+    echo Extracting xpdf-tools to Documents...
 
-    "C:\Program Files\7-Zip\7z.exe" x "%ZIPFILE%" -o"%DEST_FOLDER%" -y
+    "C:\Program Files\7-Zip\7z.exe" x "%ZIPFILE%" -o"%DOCS_FOLDER%" -y >nul
+
+    if exist "%DOCS_FOLDER%\xpdf-tools-win-4.05" (
+
+        if exist "%DEST_FOLDER%" (
+
+            echo Removing old PDFTools folder...
+
+            rmdir /s /q "%DEST_FOLDER%"
+
+        )
+
+        echo Renaming xpdf-tools-win-4.05 to PDFTools...
+
+        ren "%DOCS_FOLDER%\xpdf-tools-win-4.05" "PDFTools"
+
+    )
+
+    echo Extraction complete.
 
 ) else (
 
